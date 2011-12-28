@@ -3,7 +3,7 @@
 Plugin Name: Action Map
 Plugin URI: http://www.pagelines.com/
 Description: Shows where WordPress and PageLines actions are included in the templates live on the page.
-Version: 1.5.4
+Version: 1.6
 Author: PageLines
 Author URI: http://www.pagelines.com
 pagelines: true
@@ -13,7 +13,7 @@ Tags: hooks
 add_action('template_redirect', 'pl_actionmap' );
 
 function pl_actionmap() {
-  
+  		
 	global $wp_admin_bar;
 	global $pagelines_template;
 	if ( !current_user_can('edit_theme_options') )
@@ -60,6 +60,20 @@ function get_hooks_array(){
 			'loop_start',
 			'loop_end'
     	);
+	
+	global $load_sections;
+	$available = $load_sections->pagelines_register_sections( false, true );
+	
+	$sections = array();	
+	foreach( $available as $type ) {	
+		foreach( $type as $key => $data ) {
+			
+			$sections[] = sprintf( 'pagelines_before_%s', basename( $data['base_dir'] ) );
+			$sections[] = sprintf( 'pagelines_inside_bottom_%s', basename( $data['base_dir'] ) );
+			$sections[] = sprintf( 'pagelines_after_%s', basename( $data['base_dir'] ) );
 
-	return apply_filters('pagelines_hooks', array_merge( $hooks, $wp_hooks ) );
+		}
+	}
+	
+	return apply_filters('pagelines_hooks', array_merge( $hooks, $wp_hooks, $sections ) );
 }
