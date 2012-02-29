@@ -1,0 +1,10 @@
+== Description ==
+
+Shows where WordPress and PageLines actions are included in the templates live on the page.
+
+
+== Changelog ==
+
+= 1.7 =
+* Add new actions for 2.1.3
+* Use LESS css system.

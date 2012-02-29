@@ -3,7 +3,7 @@
 Plugin Name: Action Map
 Plugin URI: http://www.pagelines.com/
 Description: Shows where WordPress and PageLines actions are included in the templates live on the page.
-Version: 1.6
+Version: 1.7
 Author: PageLines
 Author URI: http://www.pagelines.com
 pagelines: true
@@ -11,7 +11,15 @@ Tags: hooks
 */
 
 add_action('template_redirect', 'pl_actionmap' );
+add_filter( 'pagelines_lesscode', 'am_less', 10, 1 );
 
+function am_less( $less ) {
+	
+	
+	$less .= pl_file_get_contents( sprintf( '%s/color.less', plugin_dir_path( __FILE__ ) ) );
+	
+	return $less;
+}
 function pl_actionmap() {
   		
 	global $wp_admin_bar;
@@ -41,7 +49,7 @@ function pl_actionmap() {
 	$wp_admin_bar->add_menu( array( 'id' => 'actionmap', 'title' => __("ActionMap " . $status, 'pagelines'), 'href' => $url ) );  
 	if ( $status === 'On' )
 			foreach ( get_hooks_array() as $hook )
-					add_action( $hook , create_function( '', 'echo "<div style=\"display:block;\"><span style=\"border: 1px solid red;padding:2px;margin:1px;display:inline-block\">' . $hook . '</span></div>";') );
+					add_action( $hook , create_function( '', 'echo "<div style=\"display:block;\"><span class=\"actionmap\">' . $hook . '</span></div>";') );
     
 }
 
@@ -71,6 +79,7 @@ function get_hooks_array(){
 			$sections[] = sprintf( 'pagelines_before_%s', basename( $data['base_dir'] ) );
 			$sections[] = sprintf( 'pagelines_inside_bottom_%s', basename( $data['base_dir'] ) );
 			$sections[] = sprintf( 'pagelines_after_%s', basename( $data['base_dir'] ) );
+			$sections[] = sprintf( 'pagelines_outer_%s', basename( $data['base_dir'] ) );
 
 		}
 	}
