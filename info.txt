@@ -2,6 +2,9 @@
 
 Shows where WordPress and PageLines actions are included in the templates live on the page.
 
+Once activated, when you are logged in and view your site you will see an 'action map on or off' button on the admin bar.
+Toggle on or off to see the available hooks.
+
 
 == Changelog ==
 
