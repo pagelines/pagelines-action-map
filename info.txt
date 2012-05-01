@@ -8,6 +8,11 @@ Toggle on or off to see the available hooks.
 
 == Changelog ==
 
+= 1.7.1 =
+
+* Clean up.
+
 = 1.7 =
+
 * Add new actions for 2.1.3
 * Use LESS css system.

@@ -3,7 +3,7 @@
 Plugin Name: Action Map
 Plugin URI: http://www.pagelines.com/
 Description: Shows where WordPress and PageLines actions are included in the templates live on the page.
-Version: 1.7
+Version: 1.7.1
 Author: PageLines
 Author URI: http://www.pagelines.com
 pagelines: true
@@ -14,8 +14,7 @@ add_action('template_redirect', 'pl_actionmap' );
 add_filter( 'pagelines_lesscode', 'am_less', 10, 1 );
 
 function am_less( $less ) {
-	
-	
+
 	$less .= pl_file_get_contents( sprintf( '%s/color.less', plugin_dir_path( __FILE__ ) ) );
 	
 	return $less;
