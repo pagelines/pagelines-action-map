@@ -8,6 +8,9 @@ Toggle on or off to see the available hooks.
 
 == Changelog ==
 
+= 1.8 = 
+* Use same tech as hooker plugin to get all possible hooks.
+
 = 1.7.1 =
 
 * Clean up.
