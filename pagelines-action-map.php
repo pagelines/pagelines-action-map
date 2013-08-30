@@ -3,7 +3,7 @@
 Plugin Name: Action Map
 Plugin URI: http://www.pagelines.com/
 Description: Shows where WordPress and PageLines actions are included in the templates live on the page.
-Version: 1.8.1
+Version: 1.8.2
 Author: PageLines
 Author URI: http://www.pagelines.com
 pagelines: true
@@ -15,28 +15,27 @@ new Action_Map;
 class Action_Map {
 
 	function __construct() {		
-		add_action('template_redirect', array( &$this, 'pl_actionmap' ) );
-	//	add_filter( 'pagelines_lesscode', array( &$this, 'am_less', 10, 1 ) );		
+		add_action('template_redirect', array( $this, 'pl_actionmap' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'css' ) );		
 	}
 
 
-	function am_less() {
+	function css() {
 
-		pagelines_insert_core_less( sprintf( '%s/color.less', plugin_dir_path( __FILE__ ) ) );	
+		wp_enqueue_style( 'action-map', plugins_url( 'style.css', __FILE__ ) );	
 
 	}
 
 	function pl_actionmap() {
-  		
-		if( function_exists( 'ploption' ) );
-			$this->am_less();
+
 		global $wp_admin_bar;
 		global $pagelines_template;
 		if ( !current_user_can('edit_theme_options') )
     		return;
 
-		if ( basename( get_template_directory() ) != 'pagelines' )
-			return;
+		$dir = basename( get_template_directory() );
+		if ( 'dms' != $dir && 'pagelines' != $dir )
+		 	return;
 
 		if ( !isset( $wp_admin_bar ) )
 			return;
@@ -56,9 +55,10 @@ class Action_Map {
 		$wp_admin_bar->add_menu( array( 'id' => 'actionmap', 'title' => __("ActionMap " . $status, 'pagelines'), 'href' => $url ) );
 		$wp_hooks = $this->wp_hooks();
 		$hooks = $this->get_pl_hooks();
+		$hooks = ( is_array( $hooks ) ) ? $hooks : array();
 		$sections = $this->get_section_hooks();
 
-		$hooks = array_merge( $wp_hooks, json_decode( $hooks ), $sections );
+		$hooks = array_merge( $wp_hooks, $hooks, $sections );
 		if ( $status === 'On' )
 			foreach ( $hooks as $hook )
 				add_action( $hook , create_function( '', 'echo "<div style=\"display:block;\"><span class=\"actionmap\">' . $hook . '</span></div>";') );
@@ -69,7 +69,7 @@ class Action_Map {
 
 		// see if we have hooks already....
 
-		$url = 'api.pagelines.com/framework/hooks.php?api=1';
+		$url = 'api.pagelines.com/dms-updates/hooks.php?api=1';
 		if( $hooks = get_transient( 'pagelines_hooks' ) )
 			return $hooks;
 		$response = pagelines_try_api( $url, false );
@@ -83,7 +83,8 @@ class Action_Map {
 				$out = $hooks;
 			}
 		}
-	return $out;
+		
+	return json_encode( $out );
 	}
 
 	function get_section_hooks() {
