@@ -69,10 +69,10 @@ class Action_Map {
 
 		// see if we have hooks already....
 
-		$url = 'api.pagelines.com/dms-updates/hooks.php?api=1';
+		$url = 'http://api.pagelines.com/dms-updates/hooks.php?api=1';
 		if( $hooks = get_transient( 'pagelines_hooks' ) )
 			return $hooks;
-		$response = pagelines_try_api( $url, false );
+		$response = wp_remote_get( $url );
 
 		if ( $response !== false ) {
 			if( ! is_array( $response ) || ( is_array( $response ) && $response['response']['code'] != 200 ) ) {
