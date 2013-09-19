@@ -3,7 +3,7 @@
 Plugin Name: Action Map
 Plugin URI: http://www.pagelines.com/
 Description: Shows where WordPress and PageLines actions are included in the templates live on the page.
-Version: 1.8.2
+Version: 1.8.3
 Author: PageLines
 Author URI: http://www.pagelines.com
 pagelines: true
@@ -69,7 +69,7 @@ class Action_Map {
 
 		// see if we have hooks already....
 
-		$url = 'http://api.pagelines.com/dms-updates/hooks.php?api=1';
+		$url = 'http://www.pagelines.com/api/dms-updates/hooks.php?api=1';
 		if( $hooks = get_transient( 'pagelines_hooks' ) )
 			return $hooks;
 		$response = wp_remote_get( $url );
